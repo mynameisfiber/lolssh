@@ -28,7 +28,7 @@ config file (`~/.ssh/config`) and add the following,
 
 ```
 Host *
-    LocalForward 17363 127.0.0.1 17363
+    RemoteForward 17363 127.0.0.1:17363
 ```
 
 Note that this enables the forwarding on ALL machines.  You may want to be a bit
