@@ -42,4 +42,4 @@ running any time that you are going to be doing remote commits.
 
 ## Future
 
-Make this all automated!
+Make the install automated!
