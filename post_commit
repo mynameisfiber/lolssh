@@ -39,6 +39,6 @@ else
     CLEAN_REPO=$( urlencode "${REPO}" )
     CLEAN_SHA=$( urlencode "${SHA}" )
     CLEAN_MESSAGE=$( urlencode "${MESSAGE}" )
-    curl "http://127.0.0.1:17363/commit/${CLEAN_REPO}/${CLEAN_SHA}/${CLEAN_MESSAGE}"
+    curl -s "http://127.0.0.1:17363/commit/${CLEAN_REPO}/${CLEAN_SHA}/${CLEAN_MESSAGE}"
     echo
 fi
