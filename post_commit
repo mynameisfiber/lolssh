@@ -1,3 +1,18 @@
+urlencode() {
+    local data
+    if [ $# -ne 1 ]; then
+        echo "Usage: $0 string-to-urlencode"
+        return 1
+    fi
+    data="$(curl -s -o /dev/null -w %{url_effective} --get --data-urlencode "$1" "")"
+    if [ $? != 3 ]; then
+        echo "Unexpected error" 1>&2
+        return 2
+    fi
+    echo "${data##/?}"
+    return 0
+}
+
 SESSION_TYPE=local
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   SESSION_TYPE=remote
@@ -7,18 +22,23 @@ else
   esac
 fi
 
-if [[ "$SESSION_TYPE" == "local" ]]; then
+if [ "z$SESSION_TYPE" = "zlocal" ]; then
     export PATH="/usr/bin/ruby:$PATH"
     lolcommits --capture
 else
     MESSAGE=$( git log -1 HEAD --pretty=format:%s )
     SHA=$( git log -1 HEAD --pretty=format:%H )
-    
+ 
     REMOTE=$( git remote -v | head -n 1 )
-    if [[ -z "$REMOTES" ]]; then
+    if [ -z "$REMOTES" ]; then
         REPO=$( git rev-parse --show-toplevel | xargs basename )
     else
         REPO=$( echo $REMOTE | head -n 1 | awk '{ print $2 }' | grep -o '[^/]*$' )
     fi
-    curl "http://127.0.0.1:17363/commit/${REPO}/${SHA}/${MESSAGE}"
+
+    CLEAN_REPO=$( urlencode "${REPO}" )
+    CLEAN_SHA=$( urlencode "${SHA}" )
+    CLEAN_MESSAGE=$( urlencode "${MESSAGE}" )
+    curl "http://127.0.0.1:17363/commit/${CLEAN_REPO}/${CLEAN_SHA}/${CLEAN_MESSAGE}"
+    echo
 fi

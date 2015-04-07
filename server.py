@@ -19,7 +19,10 @@ def hello_world(repo, sha, msg):
         '--msg', msg,
     ]
     ret = subprocess.call(command)
-    return "RET: {}".format(ret), 200
+    if ret == 0:
+        return "lolcommit succesful!", 200
+    else:
+        return "lolcommit error code: {}".format(ret), 500
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=17363)
