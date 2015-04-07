@@ -3,7 +3,9 @@
 > Because I want to lol on *all* of my commits
 
 This is a hacked together set of tools so that you can lolcommit even when
-working with remote machines.  BE WARNED: this is a hack.
+working with remote machines.  BE WARNED: this is a hack. It also currently
+relies on my [lolcommits
+patch](https://github.com/mynameisfiber/lolcommits/commit/80dce591e7c5674762efb1990395aedd92f3eee8).
 
 ## Install
 
