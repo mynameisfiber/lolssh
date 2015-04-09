@@ -6,7 +6,7 @@ tail='### END LOLSSH GENERATED CONTENT'
 update_file() {
     contentsfile=$1
     targetfile=$2
-    sed --posix -i.bak -e "/^${lead}$/,/$tail/{ /^${lead}$/{p; r ${contentsfile}
+    sed --posix -i.bak -e "/^${lead}$/,/^$tail$/{ /^${lead}$/{p; r ${contentsfile}
             }; /^${tail}$/p; d }" ${targetfile}
 }
 
@@ -31,7 +31,7 @@ else
     create_file ./conf/ssh-config ~/.ssh/config
 fi
 
-if ! grep --quiet templatedir ~/.gitconfig; then
+if ! grep --quiet "templatedir" ~/.gitconfig; then
     echo "Creating gitconfig"
     if [ ! -e ~/.gitconfig ]; then
         touch ~/.gitconfig
@@ -43,13 +43,15 @@ templatedir=$( grep templatedir ~/.gitconfig | cut -d'=' -f2 | xargs echo )
 if [ ! -d ${templatedir}/hooks ]; then
     mkdir ${templatedir}/hooks
 fi
-if [ ! -e ${templatedir}/hooks/post-commit ]; then
-    echo "Creating new git post-commit hook in ${templatedir}"
-    create_file ./conf/post-commit ${temlatedir}/hooks/post-commit
-else
+if grep --quiet "$lead" ${templatedir}/hooks/post-commit ; then
     echo "Updating git post-commit hook in ${templatedir}"
     update_file ./conf/post-commit ${templatedir}/hooks/post-commit
+else
+    echo "Creating new git post-commit hook in ${templatedir}"
+    create_file ./conf/post-commit ${templatedir}/hooks/post-commit
 fi
 
 echo "Checking and removing any existing lolcommits hook in post-commit hook"
-sed -i.bak '/^${lead}$/,/^${tail}$/d' ${templatedir}/hooks/post-commit
+sed -i.bak \
+    '/### lolcommits hook (begin) ###/,/###  lolcommits hook (end)  ###/d' \
+    ${templatedir}/hooks/post-commit 

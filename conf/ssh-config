@@ -1,6 +1,6 @@
 PermitLocalCommand yes
 Host *
     RemoteForward 17363 127.0.0.1:17363
-    LocalCommand lolssh
+    LocalCommand python -m lolssh.server
     
 
