@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='lolssh',
-    version='0.2',
+    version='0.3',
     description='Server for lolssh so you can lolcommit on remote machines',
     author='Micha Gorelick',
     author_email='mynameisfiber@gmail.com',

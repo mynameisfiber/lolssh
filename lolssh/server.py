@@ -34,12 +34,17 @@ class LolSSHHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 s.end_headers()
                 s.wfile.write("Invalid SHA")
 
+    def log_message(self, *args, **kwargs):
+        return None
+
 if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer
     httpd = server_class((HOST_NAME, PORT_NUMBER), LolSSHHandler)
-    print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print time.asctime(), "started lolssh server - %s:%s" % (HOST_NAME, PORT_NUMBER)
     try:
         httpd.serve_forever()
+    except BaseHTTPServer.socket.error:
+        print "lolssh already running"
     except KeyboardInterrupt:
         pass
     httpd.server_close()

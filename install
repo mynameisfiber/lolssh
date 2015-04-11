@@ -13,7 +13,7 @@ update_file() {
 create_file() {
     contentsfile=$1
     targetfile=$2
-    echo -e "\n${lead}\n$( cat ${contentsfile} )\n${tail}" >> ${targetfile}
+    echo "$( echo -e "\n${lead}\n$( cat ${contentsfile} )\n${tail}\n\n" | cat - ${targetfile} )" > ${targetfile}
 }
 
 if egrep --quiet "$lead" ~/.ssh/config; then
