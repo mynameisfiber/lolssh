@@ -2,6 +2,7 @@ import time
 import BaseHTTPServer
 import urllib
 import re
+from socket import error as socket_error
 
 from lolcommits import commit, InvalidSHA
 
@@ -43,7 +44,7 @@ if __name__ == '__main__':
     print time.asctime(), "started lolssh server - %s:%s" % (HOST_NAME, PORT_NUMBER)
     try:
         httpd.serve_forever()
-    except BaseHTTPServer.socket.error:
+    except socket_error:
         print "lolssh already running"
     except KeyboardInterrupt:
         pass
