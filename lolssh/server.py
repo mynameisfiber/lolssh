@@ -41,10 +41,8 @@ if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer
     try:
         httpd = server_class((HOST_NAME, PORT_NUMBER), LolSSHHandler)
-        print time.asctime(), "started lolssh server - %s:%s" % (HOST_NAME, PORT_NUMBER)
         httpd.serve_forever()
     except BaseHTTPServer.socket.error:
-        print "lolssh already running"
+        pass
     except KeyboardInterrupt:
         httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
