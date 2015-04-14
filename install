@@ -1,22 +1,24 @@
 #!/bin/bash
 
-lead='### BEGIN LOLSSH GENERATED CONTENT'
-tail='### END LOLSSH GENERATED CONTENT'
+LOLSSH_LEAD='### BEGIN LOLSSH GENERATED CONTENT'
+LOLSSH_TAIL='### END LOLSSH GENERATED CONTENT'
 
 update_file() {
     contentsfile=$1
     targetfile=$2
-    sed --posix -i.bak -e "/^${lead}$/,/^$tail$/{ /^${lead}$/{p; r ${contentsfile}
-            }; /^${tail}$/p; d }" ${targetfile}
+    sed --posix -i.bak -e "/^${LOLSSH_LEAD}$/,/^$LOLSSH_TAIL$/{ /^${LOLSSH_LEAD}$/{p; r ${contentsfile}
+            }; /^${LOLSSH_TAIL}$/p; d }" ${targetfile}
 }
 
 create_file() {
     contentsfile=$1
     targetfile=$2
-    echo "$( echo -e "\n${lead}\n$( cat ${contentsfile} )\n${tail}\n\n" | cat - ${targetfile} )" > ${targetfile}
+    echo "$( echo -e "\n${LOLSSH_LEAD}\n$( cat ${contentsfile} )\n${LOLSSH_TAIL}\n\n" \
+        | cat - ${targetfile} )" \
+        > ${targetfile}
 }
 
-if egrep --quiet "$lead" ~/.ssh/config; then
+if egrep --quiet "$LOLSSH_LEAD" ~/.ssh/config; then
     echo "Updating ssh-config entry"
     update_file ./conf/ssh-config ~/.ssh/config
 else
@@ -43,7 +45,7 @@ templatedir=$( grep templatedir ~/.gitconfig | cut -d'=' -f2 | xargs echo )
 if [ ! -d ${templatedir}/hooks ]; then
     mkdir ${templatedir}/hooks
 fi
-if grep --quiet "$lead" ${templatedir}/hooks/post-commit ; then
+if grep --quiet "$LOLSSH_LEAD" ${templatedir}/hooks/post-commit ; then
     echo "Updating git post-commit hook in ${templatedir}"
     update_file ./conf/post-commit ${templatedir}/hooks/post-commit
 else
