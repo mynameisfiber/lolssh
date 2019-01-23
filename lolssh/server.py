@@ -13,7 +13,6 @@ class LolSSHHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     _path_parse = re.compile("^/commit/(?P<repo>[^/]+)/(?P<sha>[^/]+)/(?P<msg>.+)$")
     def do_GET(s):
         """Respond to a GET request."""
-        print s.path
         path_search = s._path_parse.search(urllib.unquote_plus(s.path))
         if path_search is None:
             s.send_response(400)
